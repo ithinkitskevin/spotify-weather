@@ -3,10 +3,11 @@ import requests
 import base64
 from datetime import date
 from flask import request
+from os import environ
 
-#  Client Keys
-CLIENT_ID = "e7c5c33ec8a0430c8c2fe1b40087774c"
-CLIENT_SECRET = "d1aaa3b074ee4aef9abf3301d36281e6"
+#  Client Keys. Located as the environment variables
+CLIENT_ID = environ.get('CLIENT_ID')
+CLIENT_SECRET = environ.get('CLIENT_SECRET')
 
 # Spotify URLS
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
@@ -34,7 +35,7 @@ auth_query_parameters = {
 }
 
 def getRecommendationThroughTracks(authorization_header, listOfSeedTracks, listOfAudioFeature):
-    # example; https://api.spotify.com/v1/recommendations?limit=10&market=ES&seed_tracks=1BDY39wDjT45KwlPADHap3%2C2wz8v9hjCcnp3m7kbZZMTG&target_acousticness=3
+    """ Utilizes a list of seed (5 max) and list of audio feature (currently none FIX) to return json of recommendation """
     limit = 20
     market = "ES"
     recommend_base_endpoint = "{}/recommendations?limit={}&market={}".format(SPOTIFY_API_URL,limit,market)
@@ -49,8 +50,7 @@ def getRecommendationThroughTracks(authorization_header, listOfSeedTracks, listO
     return recommend_data
 
 def getProfileData(authorization_header):
-    # Getting the information
-    # Get profile data
+    """ Gets the profile data """
     user_profile_api_endpoint = "{}/me".format(SPOTIFY_API_URL)
     profile_response = requests.get(user_profile_api_endpoint, headers=authorization_header)
     profile_data = json.loads(profile_response.text)
@@ -58,8 +58,7 @@ def getProfileData(authorization_header):
     return profile_data
 
 def getTopTrack(authorization_header):
-    # GET https://api.spotify.com/v1/me/top/{type}
-    # https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=50
+    """ Gets the current (4 weeks) top track """
     time_range = 'short_term'
     limit = 50
     type = 'tracks'
@@ -73,8 +72,7 @@ def getTopTrack(authorization_header):
     return top_track_data
 
 def getPlaylistData(authorization_header, profile_data):
-    # # Get user playlist data
-    # Get user playlist data
+    """ Gets all the playlists """
     playlist_api_endpoint = "{}/playlists".format(profile_data["href"])
     playlists_response = requests.get(playlist_api_endpoint, headers=authorization_header)
     playlist_data = json.loads(playlists_response.text)
@@ -82,7 +80,7 @@ def getPlaylistData(authorization_header, profile_data):
     return playlist_data
 
 def getTrackFromPlaylistData(authorization_header, playlist_data):
-    # Get user Track from data for Playlist
+    """ Gets all the tracks from a single playlist """
     tracks_api_endpoint = "{}/tracks".format(playlist_data["href"])
     tracks_response = requests.get(tracks_api_endpoint, headers=authorization_header)
     track_data = json.loads(tracks_response.text)
@@ -90,7 +88,7 @@ def getTrackFromPlaylistData(authorization_header, playlist_data):
     return track_data
 
 def postBlankPlaylist(authorization_header, weather, user_id):
-    # create a blank playlist to store
+    """ Creates a blank playlist """
     d = date.today()
     user_date = d.strftime("%m/%d/%y")
     title = '{} {}'.format(d,weather)
@@ -110,7 +108,7 @@ def postBlankPlaylist(authorization_header, weather, user_id):
     return post_playlist_api_response, playlist_id
 
 def postTrackToPlaylist(authorization_header, track_id_list, playlist_id):
-    # https://api.spotify.com/v1/playlists/0R7m3oPH6gdaCeEdS6z0sq/tracks?uris=
+    """ Puts a list of tracks (track_id_list) to a playlist (playlist_id) """
     edited_track_list = ['spotify:track:{}'.format(track_id) for track_id in track_id_list]
     print("edited_track_list",edited_track_list)
     post_track_api_endpoint = '{}/playlists/{}/tracks?uris={}'.format(SPOTIFY_API_URL,playlist_id,','.join(edited_track_list))
@@ -120,8 +118,7 @@ def postTrackToPlaylist(authorization_header, track_id_list, playlist_id):
     return post_track_api_response
 
 def getAudioFeatureFromTrack(authorization_header, id):
-    # Get audio feature from track
-    # https://api.spotify.com/v1/audio-features/{id}
+    """ Gets the audio feature from a single track (id) """
     audio_feature_api_endpoint = "{}/{}/audio-features/{}".format(SPOTIFY_API_BASE_URL, API_VERSION, id)
     audio_feature_response = requests.get(audio_feature_api_endpoint, headers=authorization_header)
     audio_feature_data = json.loads(audio_feature_response.text)
@@ -129,6 +126,7 @@ def getAudioFeatureFromTrack(authorization_header, id):
     return audio_feature_data
 
 def getPostRequest():
+    """ Gets the post request """
     auth_token = str(request.args["code"])
     code_payload = {
         "grant_type": "authorization_code",
@@ -144,6 +142,7 @@ def getPostRequest():
     return post_request
 
 def getAuthorizationHeader():
+    """ Returns the authorization header (authorization_header), needed for a lot of the functions"""
     post_request = getPostRequest()
 
     response_data = json.loads(post_request.text)
