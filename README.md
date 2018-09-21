@@ -7,10 +7,10 @@ This Flask app uses your zip code to first get the current weather. With that we
 
 
 localhost:8080
-![Home Screenshot](https://i.imgur.com/3WRNRPH.png "Home Screenshot")
+![Home Screenshot](https://i.imgur.com/AEVEI9W.png "Home Screenshot")
 
 localhost:8080/callback/q
-![Recommend Screenshot](https://i.imgur.com/7fJSKYj.png "Recommend Screenshot")
+![Recommend Screenshot](https://i.imgur.com/KTVgzfy.png "Recommend Screenshot")
 
 
 ## References
