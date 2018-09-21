@@ -3,7 +3,7 @@
 
 This Flask app uses your zip code to first get the current weather. With that weather, it'll look through your top-played tracks and get top 5 songs that correlate with the weather. Uses the top 5 song as seeds to get recommendation from Spotify. With the recommendation tracks, this app will create a playlist with the recommendation tracks.
 
-## ScreensShots
+## Screenshots
 
 
 localhost:8080
