@@ -16,7 +16,7 @@ localhost:8080/callback/q
 ## References
 
 
-Utilizes Flask with Python 3.7 and [Spotify API] (https://developer.spotify.com/documentation/web-api/) & [OpenWeatherMap API] (https://openweathermap.org/api).
+Utilizes Flask with Python 3.7 and [Spotify API] (https://developer.spotify.com/documentation/web-api/) & [OpenWeatherMap API] (https://openweathermap.org/api) with OAuth 2.0 Authentication. 
 
 ## What can be done better
 
