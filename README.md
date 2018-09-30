@@ -22,3 +22,5 @@ Utilizes Flask with Python 3.7 and [Spotify API] (https://developer.spotify.com/
 
 
 In [recommendation tracks] (https://developer.spotify.com/documentation/web-api/reference/browse/get-recommendations/), you're allowed to put in audio_features. So correlate audio_features and weather together to come up with better recommendation system.
+
+Also, changing the weight of audio_features fields so that the results are better.
